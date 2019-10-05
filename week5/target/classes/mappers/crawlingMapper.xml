@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="crawling">
+	<insert id="insert" parameterType="com.week5.VO.CrawlingVO">
+		INSERT INTO crawling(newsID, siteNM, category, newsTitle, newsContent, newsURL, regDate)
+		SELECT #{newsID},#{siteNM},#{category},#{newsTitle},#{newsContent},#{newsURL},#{regDate}
+		from DUAL
+		WHERE NOT EXISTS(SELECT newsID FROM crawling WHERE newsID=#{newsID})
+	</insert>
+	
+	<update id="update" parameterType="com.week5.VO.CrawlingVO">
+	UPDATE crawling
+	SET newsID=#{newsID}, siteNM=#{siteNM}, category=#{category}, newsTitle=#{newsTitle}, newsContent=#{newsContent}, newsURL=#{newsURL}, regDate=#{regDate}
+	WHERE newsID=#{newsID}
+	AND EXISTS (SELECT newsID FROM crawling WHERE newsID=#{newsID})
+	</update>
+</mapper>
